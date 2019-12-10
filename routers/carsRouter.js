@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
     const carData = req.body;
-    db('cars').insert(cartData)
+    db('cars').insert(carData)
         .then(ids => {
             db('cars').where({ id: ids[0] })
                 .then(newCar => {
