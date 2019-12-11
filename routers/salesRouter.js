@@ -12,22 +12,22 @@ const db = knex({
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    db('cars')
-        .then(cars => {
-            res.json(cars);
+    db('sales')
+        .then(sales => {
+            res.json(sales);
         })
         .catch(err => {
-            res.status(500).json({ message: 'Failed to retrieve cars' });
+            res.status(500).json({ message: 'Failed to retrieve sales data' });
         });
 });
 
 router.post('/', (req, res) => {
-    const carData = req.body;
-    db('cars').insert(carData)
+    const saleData = req.body;
+    db('sales').insert(saleData)
         .then(ids => {
-            db('cars').where({ id: ids[0] })
-                .then(newCar => {
-                    res.status(201).json(newCar);
+            db('sales').where({ id: ids[0] })
+                .then(newSale => {
+                    res.status(201).json(newSale);
                 });
         })
         .catch(err => {
@@ -41,27 +41,27 @@ router.put("/:id", (req, res) => {
     const changes = req.body;
 
     // validate the data
-    db("cars")
+    db("sales")
         .where({ id }) // ALWAYS FILTER ON UPDATE (AND DELETE)
         .update(changes)
         .then(count => {
             if (count > 0) {
                 res.status(200).json({ message: `${count} record(s) updated` });
             } else {
-                res.status(404).json({ message: "Post not found" });
+                res.status(404).json({ message: "Sale not found" });
             }
         })
         .catch(error => {
             console.log(error);
             res.status(500).json({
-                errorMessage: "Error updating the post"
+                errorMessage: "Error updating the sale"
             });
         });
 });
 
 router.delete('/:id', (req, res) => {
     const id = req.params.id;
-    db('cars')
+    db('sales')
         .where({ id: id })
         .del()
         .then(count => {
